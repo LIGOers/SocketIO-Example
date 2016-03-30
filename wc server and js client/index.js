@@ -7,14 +7,21 @@ var os = require('os');
 var PORT = 8000;
 var IP = '167.96.79.221';
 //var IP = getLocalIP(); not working atm
+var clients = [];
 
 app.get('/', function(req, res){
   res.sendfile('index.html');
 });
 
-io.on('connection', function(socket){
-  console.log('a user connected');
 
+/*
+	socket.emit() : only send to the sender
+	io.emit() : global broadcast to all clients
+*/
+io.on('connection', function(socket){
+  console.log('a user connected, socketID : ',socket.id);
+  socket.emit('clientID', socket.id);//send the unique id back to the client 
+  clients.push(socket.id);
   /*
 	this listener will take the json object received from one user and rebroadcast
 	back to all connected devices that's listening to the tag 'JSONPayload'
@@ -29,6 +36,7 @@ io.on('connection', function(socket){
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
+    clients.splice(clients.indexOf(socket), 1);
   });
 });
 

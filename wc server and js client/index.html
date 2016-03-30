@@ -22,6 +22,7 @@
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
   var socket = io();
+  var id;
   $('form').submit(function(){
     socket.emit('JSONPayload', {'message':$('#m').val()});
     $('#m').val('');
@@ -33,6 +34,10 @@
   */
   socket.on('JSONPayload', function(JSONPayload){
     $('#messages').append($('<li>').text(JSONPayload.message));
+  });
+  socket.on('clientID', function(clientID){
+  	id = clientID;
+  	console.log(id);
   });
 </script>
 </body>
