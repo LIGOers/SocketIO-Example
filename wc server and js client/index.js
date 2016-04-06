@@ -4,8 +4,10 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var os = require('os');
 
+var iohandler = require('./iohandler.js');
+
 var PORT = 8000;
-var IP = '167.96.79.221';
+var IP = 'localhost';
 //var IP = getLocalIP(); not working atm
 var clients = [];
 
@@ -29,11 +31,13 @@ io.on('connection', function(socket){
 	!IMPORTANT: We rebroad cast information back to all clients including the original sender because it act as a 
 	way to inform sender that the server received the message
   */
+  socket.on('JSONPayload',iohandler.test);
+  /*
   socket.on('JSONPayload', function(json){
   	console.log('json: ' + JSON.stringify(json));
   	io.emit('JSONPayload', json);
   });
-
+  */
   socket.on('disconnect', function(){
     console.log('user disconnected');
     clients.splice(clients.indexOf(socket), 1);
